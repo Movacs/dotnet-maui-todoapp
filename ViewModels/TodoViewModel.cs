@@ -1,8 +1,10 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,14 +14,19 @@ using TodoAppMaui.Services;
 
 namespace TodoAppMaui.ViewModels
 {
-    public class TodoViewModel : INotifyPropertyChanged
+    public partial class TodoViewModel
     {
         public ObservableCollection<TodoItem> Todos { get; set; } = new ObservableCollection<TodoItem>();
 
-        public ICommand DeleteCommand { get; }
-
         private readonly TodoApiService _todoApiService = new TodoApiService();
 
+        public ICommand? DeleteTodoCommand { get; }
+
+        public TodoViewModel()
+        {
+            DeleteTodoCommand = new RelayCommand<TodoItem>(DeleteTodoAsync);
+        }
+      
         public async Task LoadTodosAsync()
         {
             var todos = await _todoApiService.GetTodoItemsAsync();
@@ -30,9 +37,16 @@ namespace TodoAppMaui.ViewModels
             //Todos.Add(new TodoItem { Id = 2, IsComplete = true, Title = "teszt2" });
         }
 
+        
+        private async void DeleteTodoAsync(TodoItem todo)
+        {
+            if (todo == null)
+                return;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            var success = await _todoApiService.DeleteTodoItemAsync(todo.Id);
+            if (success)
+                await LoadTodosAsync();
+        }
+
     }
 }
