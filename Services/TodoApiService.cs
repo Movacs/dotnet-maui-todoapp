@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TodoAppMaui.Models;
+using System.Net.Http.Json;
 
 namespace TodoAppMaui.Services
 {
@@ -51,6 +52,15 @@ namespace TodoAppMaui.Services
         {
             var response = await _httpClient.DeleteAsync($"todos/{id}");
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<TodoItem?> CreateTodoItemAsync(TodoItem item)
+        {
+            var response = await _httpClient.PostAsJsonAsync("todos", item);
+            response.EnsureSuccessStatusCode();
+
+            var createdItem = response.Content.ReadFromJsonAsync<TodoItem>();
+            return await createdItem;
         }
     }
 }
