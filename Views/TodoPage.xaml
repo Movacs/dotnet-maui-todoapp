@@ -22,7 +22,7 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
         <Button
-            Text="Button"
+            Text="Add new todo item"
             Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateAddTodoPageCommand}" />
     </VerticalStackLayout>
 </ContentPage>
