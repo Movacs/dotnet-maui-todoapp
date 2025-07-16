@@ -1,12 +1,21 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TodoAppMaui.Views.AddTodoPage" >
+             x:Class="TodoAppMaui.Views.AddTodoPage"
+             xmlns:viewmodel="clr-namespace:TodoAppMaui.ViewModels">
 
     <VerticalStackLayout>
-        <Label 
+        <Label
             Text="AddTodoPage"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Label Text="Todo Title:"
+               FontSize="18"/>
+        <Entry Text="{Binding Title}"
+               Placeholder="Enter title"/>
+
+        <Button Text="Add"
+                Command="{Binding AddAsyncCommand}"/>
+
     </VerticalStackLayout>
 </ContentPage>

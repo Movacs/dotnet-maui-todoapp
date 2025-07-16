@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using TodoAppMaui.Models;
 using TodoAppMaui.Services;
+using TodoAppMaui.Views;
 
 namespace TodoAppMaui.ViewModels
 {
@@ -18,13 +19,17 @@ namespace TodoAppMaui.ViewModels
     {
         public ObservableCollection<TodoItem> Todos { get; set; } = new ObservableCollection<TodoItem>();
 
-        private readonly TodoApiService _todoApiService = new TodoApiService();
+        private readonly TodoApiService _todoApiService;
 
         public ICommand? DeleteTodoCommand { get; }
 
-        public TodoViewModel()
+        public ICommand? NavigateAddTodoPageCommand { get; }
+
+        public TodoViewModel(TodoApiService todoApiService)
         {
-            DeleteTodoCommand = new RelayCommand<TodoItem>(DeleteTodoAsync);
+            DeleteTodoCommand = new AsyncRelayCommand<TodoItem>(DeleteTodoAsync);
+            NavigateAddTodoPageCommand = new AsyncRelayCommand(NavigateAddTodoPage);
+            _todoApiService = todoApiService;
         }
       
         public async Task LoadTodosAsync()
@@ -33,12 +38,15 @@ namespace TodoAppMaui.ViewModels
             Todos.Clear();
             foreach (var todo in todos)
                 Todos.Add(todo);
-            //Todos.Add(new TodoItem { Id = 1, IsComplete = false, Title = "teszt"});
-            //Todos.Add(new TodoItem { Id = 2, IsComplete = true, Title = "teszt2" });
         }
 
-        
-        private async void DeleteTodoAsync(TodoItem todo)
+        private async Task NavigateAddTodoPage()
+        {
+
+            await Shell.Current.GoToAsync(nameof(AddTodoPage));
+
+        }
+        private async Task DeleteTodoAsync(TodoItem todo)
         {
             if (todo == null)
                 return;
