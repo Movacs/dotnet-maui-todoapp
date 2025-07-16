@@ -23,6 +23,6 @@
         </CollectionView>
         <Button
             Text="Button"
-            Clicked="OnGoToAddTodoPageClicked" />
+            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateAddTodoPageCommand}" />
     </VerticalStackLayout>
 </ContentPage>

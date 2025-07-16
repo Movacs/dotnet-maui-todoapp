@@ -17,15 +17,5 @@ public partial class TodoPage : ContentPage
         base.OnAppearing();
         await _todoViewModel.LoadTodosAsync();
     }
-    private async void OnGoToAddTodoPageClicked(object sender, EventArgs e)
-	{
-        try
-        {
-            await Shell.Current.GoToAsync("//AddTodoPage");
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Hiba", ex.Message, "OK");
-        }
-    }
+    
 }
