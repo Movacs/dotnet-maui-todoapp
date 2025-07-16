@@ -7,12 +7,10 @@
     Shell.FlyoutBehavior="Disabled"
     Title="TodoAppMaui">
 
-    <ShellContent
-        ContentTemplate="{DataTemplate local:TodoPage}"
-        Route="TodoPage" />
 
     <ShellContent
-        ContentTemplate="{DataTemplate local:AddTodoPage}"
-        Route="AddTodoPage" />
-
+    Title="Todo"
+    ContentTemplate="{DataTemplate local:TodoPage}" />
+    
+    
 </Shell>
