@@ -62,5 +62,13 @@ namespace TodoAppMaui.Services
             var createdItem = response.Content.ReadFromJsonAsync<TodoItem>();
             return await createdItem;
         }
+
+        public async Task<bool> UpdateTodoItemAsync(TodoItem item)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"todos/{item.Id}", item);
+            response.EnsureSuccessStatusCode();
+            return true;
+            
+        }
     }
 }
