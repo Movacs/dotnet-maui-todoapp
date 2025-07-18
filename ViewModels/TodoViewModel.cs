@@ -22,13 +22,14 @@ namespace TodoAppMaui.ViewModels
         private readonly TodoApiService _todoApiService;
 
         public ICommand? DeleteTodoCommand { get; }
-
         public ICommand? NavigateAddTodoPageCommand { get; }
+        public ICommand? UpdateTodoCommand { get; }
 
         public TodoViewModel(TodoApiService todoApiService)
         {
             DeleteTodoCommand = new AsyncRelayCommand<TodoItem>(DeleteTodoAsync);
             NavigateAddTodoPageCommand = new AsyncRelayCommand(NavigateAddTodoPage);
+            UpdateTodoCommand = new AsyncRelayCommand<TodoItem>(UpdateTodoAsync);
             _todoApiService = todoApiService;
         }
       
@@ -56,5 +57,15 @@ namespace TodoAppMaui.ViewModels
                 await LoadTodosAsync();
         }
 
+        private async Task UpdateTodoAsync(TodoItem todo)
+        {
+            if (todo == null) return;
+
+            todo.IsComplete = (!todo.IsComplete);
+
+            await _todoApiService.UpdateTodoItemAsync(todo);
+
+            await LoadTodosAsync();
+        }
     }
 }

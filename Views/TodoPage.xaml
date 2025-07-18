@@ -2,8 +2,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TodoAppMaui.Views.TodoPage"
+             xmlns:local="clr-namespace:TodoAppMaui.Converters"
              xmlns:viewmodel="clr-namespace:TodoAppMaui.ViewModels"
              >
+    <ContentPage.Resources>
+        <local:BoolToColorConverter x:Key="BoolToColorConverter" />
+        <local:BoolToTextConverter x:Key="BoolToTextConverter" />
+    </ContentPage.Resources>
     <VerticalStackLayout>
         <Label
             Text="Todo Page"
@@ -12,12 +17,20 @@
         <CollectionView ItemsSource="{Binding Todos}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Orientation="Horizontal" Padding="10">
-                        <Label Text="{Binding Title}" FontSize="16" />
-                        <Button Text="Törlés"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTodoCommand}"
-                            CommandParameter="{Binding .}" />
-                    </StackLayout>
+                    <Grid Padding="10" ColumnDefinitions="*, Auto, Auto">
+                        <Label Text="{Binding Title}" FontSize="16"
+                               Grid.Column="0"
+                               TextColor="{Binding IsComplete, Converter={StaticResource BoolToColorConverter}}" />
+                        <Button Text="{Binding IsComplete, Converter={StaticResource BoolToTextConverter}}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.UpdateTodoCommand}"
+                                CommandParameter="{Binding .}"
+                                Grid.Column="1"/>
+                        <Button Text="Delete"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTodoCommand}"
+                                CommandParameter="{Binding .}"
+                                Grid.Column="2" 
+                                BackgroundColor="Red"/>
+                    </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
